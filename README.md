@@ -22,7 +22,7 @@ This repository provides all necessary files for a simple installation and confi
 1. Switch to the new `t6server` user: <pre>sudo su t6server</pre>
 2. Go to the home directory: <pre>cd /opt/t6server</pre>
 3. Launch the server: <pre>./t6server.sh</pre>
-I advise you to use `tmux` or `screen` to open and manage multiple servers.
+I advise you to use `screen` to open and manage the server.
 
 
 ## Source

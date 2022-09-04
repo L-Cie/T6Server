@@ -12,7 +12,7 @@ echo "Prepare the server key, while I am working!"
 echo -e '\e[1;33m[1/8]\e[0m Enabling multilib and updating Arch Linux...'
 {
   sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf
-  pacman -Syu wget --noconfirm
+  pacman -Syu wget screen --noconfirm
 } > /dev/null 2>&1
 
 ## Setup the firewall to allow T6Server
