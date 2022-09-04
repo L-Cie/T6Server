@@ -19,7 +19,8 @@ This repository provides all necessary files for a simple installation and confi
 3. Run the installation script `install.sh` and follow the instructions: <pre>sudo env "HOME=$HOME" ~/T6Server/install.sh</pre>
 
 ## Launch Server
-1. Launch the script: <pre>sudo -u t6server /opt/t6server/t6server.sh</pre>
+1. Switch to the new `t6server` user <pre>sudo su t6server</pre>
+2. Launch the server: <pre>/opt/t6server/t6server.sh</pre>
 I advise you to use `tmux` or `screen` to open and manage multiple servers.
 
 

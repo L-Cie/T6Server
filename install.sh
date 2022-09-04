@@ -5,9 +5,10 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-PAT=/opt/t6server/plutonium
+PAT=/opt/t6server
 
 ## Update the system
+echo "Prepare the server key, while I am working!"
 echo -e '\e[1;33m[1/8]\e[0m Enabling multilib and updating Arch Linux...'
 {
   sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf
@@ -30,34 +31,32 @@ echo -e '\e[1;33m[2/8]\e[0m Installing ufw and allowing connectivity for T6Serve
 ## Creating new service user for t6server
 echo -e '\e[1;33m[3/8]\e[0m Creating new t6server service user and moving files to new home...'
 {
-  useradd t6server -m -d /opt/t6server -s /bin/bash -r
-  mv $HOME/T6Server/* /opt/t6server/
+  useradd t6server -m -d $PAT -s /bin/bash -r
+  mv $HOME/T6Server/* $PAT/
 } > /dev/null 2>&1
 
 ## Installing wine
 echo -e '\e[1;33m[4/8]\e[0m Installing and configuring Wine...'
 {
   pacman -Syu wine xorg-server-xvfb --noconfirm
-  Xvfb :0 -screen 0 1024x768x16 && \
-  echo -e 'export WINEPREFIX=~/.wine\nexport WINEDEBUG=fixme-all\nexport WINEARCH=win64' >> /opt/t6server/.bashrc
-  echo -e 'export DISPLAY=:0.0' >> /opt/t6server/.bashrc
-  source /opt/t6server/.bashrc
-  winecfg
+  echo -e 'export WINEPREFIX=~/.wine\nexport WINEDEBUG=fixme-all\nexport WINEARCH=win64' >> $PAT/.bashrc
+  echo -e 'export DISPLAY=:0.0' >> $PAT/.bashrc
+  source $PAT/.bashrc
+  cd $PAT
+  runuser t6server -s /bin/bash -c "winecfg"
 } > /dev/null 2>&1
 
 echo -e '\e[1;33m[5/8]\e[0m Installing Plutonium Updater...'
 {
-  ln -s /opt/t6server/server/zone /opt/t6server/server/zombie/zone
-  ln -s /opt/t6server/server/zone /opt/t6server/server/multiplayer/zone
-  mkdir -p $PAT
-  cd $PAT
+  ln -s $PAT/server/zone $PAT/server/zombie/zone
+  ln -s $PAT/server/zone $PAT/server/multiplayer/zone
   wget https://github.com/mxve/plutonium-updater.rs/releases/latest/download/plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
   tar xfv plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
   rm plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
   chmod +x plutonium-updater
 
  # Make executable script
-  chmod +x /opt/t6server/t6server.sh
+  chmod +x $PAT/t6server.sh
 } > /dev/null 2>&1
 
 echo -e '\e[1;33m[6/8]\e[0m Removing git files...'
@@ -66,14 +65,11 @@ echo -e '\e[1;33m[6/8]\e[0m Removing git files...'
 } > /dev/null 2>&1
 
 echo -e '\e[1;33m[7/8]\e[0m Configuring your T6Server and settings permissions accordingly...'
-echo -n 'Please specify your server name: '
-read servername
 echo -n 'Please specify your server key: '
 read serverkey 
 {
-  sed -i '/KEY=.*/s//KEY=\"'$serverkey'\"/' /opt/t6server/t6server.sh
-  sed -i '/NAME=.*/s//NAME=\"'$servername'\"/' /opt/t6server/t6server.sh
-  chown -R t6server:t6server /opt/t6server
+  sed -i '/KEY=.*/s//KEY=\"'$serverkey'\"/' $PAT/t6server.sh
+  chown -R t6server:t6server $PAT
 } > /dev/null 2>&1
 
 echo -e '\e[1;33m[8/8]\e[0m Installation Complete!'
