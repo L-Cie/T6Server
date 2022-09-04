@@ -10,7 +10,7 @@ This repository provides all necessary files for a simple installation and confi
 ## Requirements
 - Tested on LXC Container:
    - 1 CPU Core
-   - 768 MB RAM
+   - 1 GB RAM
    - approx. 10 GB disk space
 
 ## Installation
