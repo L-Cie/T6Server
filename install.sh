@@ -1,87 +1,79 @@
 #!/bin/bash
-## Update Region
-echo "[1/7] Set last version of your system"
-{
-apt update && apt upgrade -y
-} > /dev/null 2>&1
-## End Region
+## Checking for root access
+if [ "$EUID" -ne 0 ]
+  then echo 'Please run as with elevated privileges'
+  exit
+fi
 
-## Firewall Region
-echo "[2/7] Install firewall and allow 22 port..."
-{
-apt install ufw fail2ban -y && \
-ufw allow 22/tcp && \
-ufw default allow outgoing && \
-ufw default deny incoming && \
-ufw -f enable
-} > /dev/null 2>&1
-## End Region
+PAT=/opt/t6server/plutonium
 
-# Enable 32 bit packages
-echo "[3/7] Enable 32 bit packages..."
+## Update the system
+echo -e '\e[1;33m[1/8]\e[0m Enabling multilib and updating Arch Linux...'
 {
-dpkg --add-architecture i386 && \
-apt-get update -y && \
-apt-get install wget gnupg2 software-properties-common apt-transport-https curl -y
+  sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf
+  pacman -Syu wget --noconfirm
 } > /dev/null 2>&1
 
-## Wine Region
-echo "[4/7] Installing Wine..."
+## Setup the firewall to allow T6Server
+echo -n 'Please specify port for T6Server [4976/udp]: '
+read t6port
+echo -e '\e[1;33m[2/8]\e[0m Installing ufw and allowing connectivity for T6Server...'
 {
-wget -nc https://dl.winehq.org/wine-builds/winehq.key
-apt-key add winehq.key && \
-apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ buster main'
-rm winehq.key
-apt update -y
-apt install --install-recommends winehq-stable -y
-
-# Add Variables to the environment at the end of ~/.bashrc
-echo -e 'export WINEPREFIX=~/.wine\nexport WINEDEBUG=fixme-all\nexport WINEARCH=win64' >> ~/.bashrc
-echo -e 'export DISPLAY=:0' >> ~/.bashrc
-source ~/.bashrc
-winecfg
+  pacman -S ufw --noconfirm && \
+  ufw default allow outgoing && \
+  ufw default deny incoming && \
+  ufw allow ${t6port:-4976}/udp && \
+  ufw -f enable && \
+  systemctl enable ufw --now
 } > /dev/null 2>&1
-## End Region
 
-## Pre-Required for IW4MAdmin Region
-echo "[5/7] Installing Pre-Required for IW4MAdmin..."
+## Creating new service user for t6server
+echo -e '\e[1;33m[3/8]\e[0m Creating new t6server service user and moving files to new home...'
 {
-#Installation .NET Core 3.1
-wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
-
-#Install the SDK
-#The .NET SDK allows you to develop apps with .NET. If you install the .NET SDK, you don't need to install the corresponding runtime. To install the .NET SDK, run the following commands:
-
-apt-get update; \
-	apt-get install -y dotnet-sdk-3.1
-	apt-get install -y dotnet-sdk-6.0
-
-#Install the runtime
-#The ASP.NET Core Runtime allows you to run apps that were made with .NET that didn't provide the runtime. The following commands install the ASP.NET Core Runtime, which is the most compatible runtime for .NET. In your terminal, run the following commands:
-
-apt-get update; \
-	apt-get install -y aspnetcore-runtime-3.1
-	apt-get install -y aspnetcore-runtime-6.0
+  useradd t6server -m -d /opt/t6server -s /bin/bash -r
+  mv $HOME/T6Server/* /opt/t6server/
 } > /dev/null 2>&1
-## End Region
 
-echo "[6/7] Game Binary Installation"
+## Installing wine
+echo -e '\e[1;33m[4/8]\e[0m Installing and configuring Wine...'
 {
-  # Shortcut Zone
-  ln -s $HOME/T6Server/Server/zone $HOME/T6Server/Server/Zombie/zone
-  ln -s $HOME/T6Server/Server/zone $HOME/T6Server/Server/Multiplayer/zone
+  pacman -Syu wine xorg-server-xvfb --noconfirm
+  Xvfb :0 -screen 0 1024x768x16 && \
+  echo -e 'export WINEPREFIX=~/.wine\nexport WINEDEBUG=fixme-all\nexport WINEARCH=win64' >> /opt/t6server/.bashrc
+  echo -e 'export DISPLAY=:0.0' >> /opt/t6server/.bashrc
+  source /opt/t6server/.bashrc
+  winecfg
+} > /dev/null 2>&1
 
-  # Download plutonium-updater
-  cd $HOME/T6Server/Plutonium/
+echo -e '\e[1;33m[5/8]\e[0m Installing Plutonium Updater...'
+{
+  ln -s /opt/t6server/server/zone /opt/t6server/server/zombie/zone
+  ln -s /opt/t6server/server/zone /opt/t6server/server/multiplayer/zone
+  mkdir -p $PAT
+  cd $PAT
   wget https://github.com/mxve/plutonium-updater.rs/releases/latest/download/plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
   tar xfv plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
   rm plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
   chmod +x plutonium-updater
 
  # Make executable script
-  chmod +x $HOME/T6Server/Plutonium/T6Server.sh
+  chmod +x /opt/t6server/t6server.sh
 } > /dev/null 2>&1
 
-echo "[7/7] Installation Complete"
+echo -e '\e[1;33m[6/8]\e[0m Removing git files...'
+{
+  rm -r $HOME/T6Server
+} > /dev/null 2>&1
+
+echo -e '\e[1;33m[7/8]\e[0m Configuring your T6Server and settings permissions accordingly...'
+echo -n 'Please specify your server name: '
+read servername
+echo -n 'Please specify your server key: '
+read serverkey 
+{
+  sed -i '/KEY=.*/s//KEY=\"'$serverkey'\"/' /opt/t6server/t6server.sh
+  sed -i '/NAME=.*/s//NAME=\"'$servername'\"/' /opt/t6server/t6server.sh
+  chown -R t6server:t6server /opt/t6server
+} > /dev/null 2>&1
+
+echo -e '\e[1;33m[8/8]\e[0m Installation Complete!'

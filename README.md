@@ -1,32 +1,30 @@
 
-![alt text](https://img.shields.io/badge/Debian-10-red?logo=Debian)
-![alt text](https://img.shields.io/badge/Plutonium-T6-blue)
+![alt text](https://img.shields.io/badge/Arch_Linux-blue?logo=Archlinux)
+![alt text](https://img.shields.io/badge/Plutonium-T6-orange)
 
-<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="350"/> <img src="https://i.imgur.com/TdpsBgH.png" alt="drawing" width="200"/>
+<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="350"/>
 
 # T6Server
-All files needed for a simple installation and configuration of a T6 server on linux.
+This repository provides all necessary files for a simple installation and configuration of a T6 server on Arch Linux.
+
+## Requirements
+- Tested on LXC Container:
+   - 1 CPU Core
+   - 768 MB RAM
+   - approx. 10 GB disk space
 
 ## Installation
-1. Download files : <pre>git clone https://github.com/Minami-xan/T6Server.git </pre>
-2. Move to `T6Server` Folder. <pre>cd ~/T6Server/</pre>
-3. Run the Installation Script `install.sh` . <pre>sudo env "HOME=$HOME" bash install.sh</pre>
-4. **Installation Complete**
-
-## Configuration
-1. Move to `Plutonium` Folder. <pre>cd ~/T6Server/Plutonium/</pre>
-2. Edit `T6Server.sh` with your information. <pre>nano T6Server.sh</pre>
-3. Allow server port. <pre>sudo bash ~/T6Server/Scripts/allow_port.sh</pre>
-**Configuration Complete**
+1. Download files: <pre>git clone https://github.com/xr4zz/T6Server.git</pre>
+2. Make it executable:  <pre>chmod +x ~/T6Server/install.sh</pre>
+3. Run the installation script `install.sh` and follow the instructions: <pre>sudo env "HOME=$HOME" ~/T6Server/install.sh</pre>
 
 ## Launch Server
-1. Move to `Plutonium` Folder. <pre>cd ~/T6Server/Plutonium</pre>
-2. Launch Server. <pre>./T6Server.sh</pre>
-   I advise you to use `tmux` or `screen` to open and manage multiple servers.
+1. Launch the script: <pre>sudo -u t6server /opt/t6server/t6server.sh</pre>
+I advise you to use `tmux` or `screen` to open and manage multiple servers.
 
 
 ## Source
-• **Topic by me:** https://forum.plutonium.pw/topic/12870/guide-debian-t6-server-on-linux-vps-dedicated-server <br>
-• **Plutonium:** https://plutonium.pw <br>
-• **IW4MAdmin by RaidMax:** https://github.com/RaidMax/IW4M-Admin <br>
-• **Plutonium-Updater by mxbe:** https://github.com/mxve/plutonium-updater.rs <br>
+- **Plutonium:** https://plutonium.pw
+- **Thread by Minami:** https://forum.plutonium.pw/topic/12870/guide-debian-t6-server-on-linux-vps-dedicated-server
+- **Plutonium-Updater by mxbe:** https://github.com/mxve/plutonium-updater.rs
+- **Debian install script by Minami:** https://github.com/Sterbweise/T6Server
