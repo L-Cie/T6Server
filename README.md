@@ -30,3 +30,4 @@ I advise you to use `tmux` or `screen` to open and manage multiple servers.
 - **Thread by Minami:** https://forum.plutonium.pw/topic/12870/guide-debian-t6-server-on-linux-vps-dedicated-server
 - **Plutonium-Updater by mxbe:** https://github.com/mxve/plutonium-updater.rs
 - **Debian install script by Minami:** https://github.com/Sterbweise/T6Server
+- **Bot-Script by ineedbots:** https://github.com/ineedbots/pt6_bot_warfare
