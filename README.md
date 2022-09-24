@@ -2,7 +2,7 @@
 ![alt text](https://img.shields.io/badge/Arch_Linux-blue?logo=Archlinux)
 ![alt text](https://img.shields.io/badge/Plutonium-T6-orange)
 
-<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="350"/> <img src="https://hosting156997.a2efa.netcup.net/xr4zz.png" alt="drawing" width="340"/>
+<img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="350"/> <img src="http://hosting156997.a2efa.netcup.net/xr4zz.png" alt="drawing" width="350"/>
 
 # T6Server
 This repository provides all necessary files for a simple installation and configuration of a T6 server on Arch Linux.
