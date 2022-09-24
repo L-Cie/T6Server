@@ -3,6 +3,7 @@
 ![alt text](https://img.shields.io/badge/Plutonium-T6-orange)
 
 <img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="350"/>
+<img src="https://i.ibb.co/kMpx4cG/Final-Fantasy-Female-xr4zz.png" alt="drawing" width="350"/>
 
 # T6Server
 This repository provides all necessary files for a simple installation and configuration of a T6 server on Arch Linux.
