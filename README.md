@@ -14,7 +14,7 @@ This repository provides all necessary files for a simple installation and confi
    - approx. 10 GB disk space
 
 ## Installation
-1. Download files: <pre>git clone https://github.com/xr4zz/T6Server.git</pre>
+1. Download files: <pre>git clone https://github.com/L-Cie/T6Server.git</pre>
 2. Make it executable:  <pre>chmod +x ~/T6Server/install.sh</pre>
 3. Run the installation script `install.sh` and follow the instructions: <pre>sudo env "HOME=$HOME" ~/T6Server/install.sh</pre>
 
