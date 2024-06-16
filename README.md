@@ -5,7 +5,7 @@
 <img src="https://imgur.com/bBrx8Hf.png" alt="drawing" width="350"/>
 
 # T6Server
-This repository provides all necessary files for a simple installation and configuration of a T6 server on Arch Linux.
+This repository provides all necessary files for a simple installation and configuration of a T6 server on Arch Linux. It also contains a few mods such as a MapVoter and Bots. The default values for some game modes have been also adjusted.
 
 ## Requirements
 - Tested on LXC Container:
@@ -22,7 +22,7 @@ This repository provides all necessary files for a simple installation and confi
 1. Switch to the new `t6server` user: <pre>sudo su t6server</pre>
 2. Go to the home directory: <pre>cd /opt/t6server</pre>
 3. Launch the server: <pre>./t6server.sh</pre>
-I advise you to use `screen` to open and manage the server.
+I advise you to use `tmux` to open and manage the server.
 
 
 ## Source
@@ -31,3 +31,4 @@ I advise you to use `screen` to open and manage the server.
 - **Plutonium-Updater by mxbe:** https://github.com/mxve/plutonium-updater.rs
 - **Debian install script by Minami:** https://github.com/Sterbweise/T6Server
 - **Bot-Script by ineedbots:** https://github.com/ineedbots/pt6_bot_warfare
+- **MapVote by Resxt:** https://github.com/Resxt/Plutonium-T6-Scripts/tree/main/mapvote
